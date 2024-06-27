@@ -1,0 +1,460 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: hwb(259 58% 26%);
+        }
+        .navbar {
+            background-color: #343a40;
+            padding: 15px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffc107;
+        }
+        .navbar-nav .nav-link {
+            color: #f8f9fa;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+            justify-content:right;
+            width: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        .card-text {
+            font-size: 18px;
+            color: #6c757d;
+        }
+        .btn-primary {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #e0a800;
+            border-color: #e0a800;
+        }
+        .btn-outline-primary {
+            color: #ffc107;
+            border-color: #ffc107;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            transition: color 0.3s;
+        }
+        .btn-outline-primary:hover {
+            color: #e0a800;
+            border-color: #e0a800;
+        }
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #495057;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table tbody+tbody {
+            border-top: 2px solid #dee2e6;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.075);
+        }
+        .table-primary, .table-primary > th, .table-primary > td {
+            background-color: #b8daff;
+        }
+        .table-hover .table-primary:hover {
+            background-color: #9fcdff;
+        }
+        .table-hover .table-primary:hover > td, .table-hover .table-primary:hover > th {
+            background-color: #9fcdff;
+        }
+
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 240px;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+            z-index: 1; 
+        }
+        .sidebar a {
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: #ffc107;
+        }
+        .sidebar .active {
+            background-color: #495057;
+        }
+        .content {
+            margin-left: 260px; 
+            padding: 20px;
+            position: relative; 
+            z-index: 0; 
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0; 
+                padding: 20px;
+            }
+        }
+        .card {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .stats .stat {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 1;
+            margin: 10px;
+            min-width: 200px;
+        }
+        .stat h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #343a40;
+        }
+        .stat p {
+            font-size: 16px;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand" href="{% url 'home' %}">PETS SHORE</a>
+            <button class="navbar-toggler" type="button" onclick="toggleSidebar()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <a class="active" href="{% url 'home' %}">SECURE POLICY</a>
+        <hr>
+        <a href="{% url 'admin_dashboard' %}">HOME</a>
+       
+          
+        </a>
+        <hr>
+        <a href="{% url 'add_agent' %}">Add AGENT</a>
+        <a href="{% url 'view_agent' %}">VIEW AGENT</a>
+        <a href="{% url 'campaign' %}">CAMPAIGN</a>
+        <a href="#">POLICY</a>
+        <a href="#">REPORT</a>
+      
+    </div>
+
+
+    <main role="main" class="col-md-9 ms-sm-auto  col-lg-10 px-md-4 content-wrapper">
+        <div class="content">
+            <div class="card mb-4-bg bg-warning">
+                <h1 style="text-align: center;" class="card-title text-light">Admin Dashboard</h1>
+                <p class="card-text text-dark">Welcome to the admin dashboard of Secure Policy. Here you can manage agents, policies, and view reports.</p>
+                <div class="text-center ">
+                    <a href="#" class="btn btn-primary mr-3 bg-danger">View</a>
+                </div>
+            </div>
+
+            <div class="mt-5">
+                <h3 class="text-center text-primary bg-dark mb-4">Insurance Categories</h3>
+            </div>
+            <div class="card-deck">
+                <div class="card">
+                    <img src="https://st2.depositphotos.com/1177973/11185/i/380/depositphotos_111850644-stock-photo-car-insurance-concept.jpg" alt="Car Insurance" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title text-danger">Car Insurance</h4>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="https://st2.depositphotos.com/2931363/11197/i/380/depositphotos_111977884-stock-photo-two-men-signing-papers.jpg" alt="Education Insurance" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title text-info">Education Insurance</h4>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <img src="data:image/jpeg;base64,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" alt="Health Insurance" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title text-success">Health Insurance</h4>
+                    </div>
+                </div>
+
+
+                <div>
+                    <br>
+                    <br>
+                <video width="640" height="360" controls>
+                    <source src="https://player.vimeo.com/progressive_redirect/playback/933555596/rendition/1080p/file.mp4?loc=external&oauth2_token_id=1724159765&signature=d7c418eeb4e4ea2ef0fb6d8e496cc3a38766e9e0c4849cd8e43c999314af6b0c" type="video/mp4">
+                  
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+             <div>
+<h4 class="text-center text-light pt-4 mb-3">Understand your insurance policy options. Identify the best value. Enjoy peace of mind.</h4>
+
+
+                <div class="card">
+                    <img src="https://static.insurancedekho.com/pwa/img/benifitimg1.svg" alt="Education Insurance" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title text-info">5 Minutes Policy Issuance*</h4>
+                        <h6>Say no to spending hours and days in queues doing the paperwork for your insurance policy. Get your insurance issued instantly with InsuranceDekho. The entire process from selecting the best insurance policy to getting it issued takes just 5 minutes on InsuranceDekho.<h6>
+                    </div>
+                </div>
+<br><br><br>
+
+                <div class="card">
+                    <img src="https://static.insurancedekho.com/pwa/img/benifitimg2.svg" alt="Education Insurance" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title text-info">Over 50 Lac Happy Customers</h4>
+                        <h6>InsuranceDekho is becoming a household name in India. Till now we have been successful in providing a delightful experience to more than 50 lac customers with the help of our transparent and quick process, a dedicated support team along with the availability of numerous insurers.</h6>
+                    </div>
+                </div>
+                <br><br><br>
+
+                <div class="card">
+                    <img src="https://static.insurancedekho.com/pwa/img/benifitimg3.svg" alt="Education Insurance" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <h4 class="card-title text-info">Dedicated Support Team</h4>
+                        <h6>Our dedicated support team is available for your assistance all the 7 days. Feel free to reach out to us in case of any confusion - be it related to the purchase of an insurance policy or assistance during the settlement of a claim, our team of experts is at your service all days</h6>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+            <div class="mt-5">
+                <h3 class="text-center text-dark mb-4">Agent Management</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Nivedhya TP</td>
+                            <td>nivedhya@gmail.com</td>
+                            <td>+1 234 567 890</td>
+                            <td>
+                                <a href="{% url 'edit_agent' %}" class="btn btn-outline-primary btn-sm bg-dark"><i class="bi bi-pencil bg-dark"></i> Edit</a>
+                                <a href="{% url 'delete_agent' %}" class="btn btn-outline-primary btn-sm bg-dark"><i class="bi bi-trash bg-dark"></i> Delete</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Gouri ss</td>
+                            <td>gouri@gmail.com</td>
+                            <td>+1 987 654 321</td>
+                            <td>
+                                <a href="{% url 'edit_agent' %}" class="btn btn-outline-primary btn-sm bg-dark"><i class="bi bi-pencil bg-dark"></i> Edit</a>
+                                <a href="{% url 'delete_agent' %}" class="btn btn-outline-primary btn-sm bg-dark"><i class="bi bi-trash bg-dark"></i> Delete</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</div>
+
+
+
+
+<div class="content">
+    <div class="mt-5">
+        <h3 class="text-center text-dark mb-4">Insurance Categories</h3>
+    </div>
+    <div class="card-deck">
+        <div class="card">
+            <img src="https://www.insurancedekho.com/pwa/img/v2_iconpet.svg" alt="Car Insurance" class="card-img-top img-fluid">
+            <div class="card-body">
+                <h4 class="card-title text-danger">Pet Insurance</h4>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://www.insurancedekho.com/pwa/img/v2_icontravel.svg" alt="Education Insurance" class="card-img-top img-fluid">
+            <div class="card-body">
+                <h4 class="card-title text-info">Travel Insurance</h4>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://www.insurancedekho.com/pwa/img/business_insurance.svg" alt="Health Insurance" class="card-img-top img-fluid">
+            <div class="card-body">
+                <h4 class="card-title text-success">Business Insurance</h4>
+            </div>
+        </div>
+    
+
+</div>
+</div>
+</div>
+</div>
+
+<!-- gallery -->
+<div class="content">
+<div style="background-color: rgb(8, 8, 8);">
+<div class="mt-2">
+<h2 class="text-center text-light pt-4 mb-3">Our insurance partners</h2>
+<h4 class="text-center text-light pt-4 mb-3">We're associated with india's popular insurance companies.</h4>
+
+</div>
+<div class="container">
+<div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <img src="https://staticimg.insurancedekho.com/seo/insurer/bajaj.png" alt="" class="img-fluid mb-3">
+        <div class="card-body">
+            <h4 class="card-title text-warning">Bajaj allianz insurance</h4>
+           
+           
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <img src="https://staticimg.insurancedekho.com/seo/insurer/hdfc.png" alt="" class="img-fluid mb-3">
+        <div class="card-body">
+            <h4 class="card-title text-warning">HDFC ergo insurance</h4>
+          
+           
+        </div>
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-sm-12">
+        <img src="https://staticimg.insurancedekho.com/seo/insurer/royal-s.png" alt="" class="img-fluid mb-3">
+        <div class="card-body">
+            <h4 class="card-title text-warning">Royal sundharam insurance</h4>
+           
+            
+        </div>
+    </div>
+
+   
+</div>
+</div>
+
+</div>
+
+<!-- end of gallery -->
+
+
+
+
+    
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

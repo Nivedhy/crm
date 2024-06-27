@@ -1,0 +1,261 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: hwb(259 58% 26%);
+        }
+        .navbar {
+            background-color: #343a40;
+            position: relative; 
+            width: 100%;
+            padding: 20px 40px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .navbar-nav .nav-link {
+            color: #343a40;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: #ffc107;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+       
+        .card {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+        }
+        .card-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #343a40;
+        }
+        .btn-primary {
+            background-color: #ffc107;
+            border-color: #ffc107;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #e0a800;
+            border-color: #e0a800;
+        }
+        .btn-outline-primary {
+            color: #ffc107;
+            border-color: #ffc107;
+            font-size: 1.1rem;
+            padding: 10px 20px;
+            transition: color 0.3s;
+        }
+        .btn-outline-primary:hover {
+            color: #e0a800;
+            border-color: #e0a800;
+        }
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #495057;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+        }
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        .table-hover tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.075);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+        
+      
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <a class="navbar-brand" href="{% url 'home' %}">PETS SHORE</a>
+            <button class="navbar-toggler" type="button" onclick="toggleSidebar()">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'admin_dashboard' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="sidebar" id="sidebar">
+        <a class="active" href="{% url 'home' %}">SECURE POLICY</a>
+        <hr>
+        <a href="{% url 'admin_dashboard' %}">HOME</a>
+       
+          
+        </a>
+        <hr>
+        <a href="{% url 'add_agent' %}">Add AGENT</a>
+        <a href="{% url 'view_agent' %}">VIEW AGENT</a>
+        <a href="{% url 'campaign' %}">CAMPAIGN</a>
+        <a href="#">POLICY</a>
+        <a href="#">REPORT</a>
+      
+    </div>
+
+
+     
+    <div class="content">
+        <div class="flex-container">
+            <div class="form-container">
+                <h1 class="card-title text-center mb-4">Add Agent</h1>
+                <form method="POST" action="{% url 'add_agent' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="agent_name" class="form-label">Agent Name:</label>
+                        <input type="text" id="agent_name" name="agent_name" class="form-control" aria-label="Agent Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="qualification" class="form-label">Qualification</label>
+                        <input type="text" id="qualification" name="qualification" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" class="form-control" required>
+                    </div>
+                  
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-block bg-success" aria-label="Add Category">SUBMIT</button>
+                    </div>
+                </form>
+            </div>
+        </body>
+</html>
+    
+    
+    
+    
+    
+
+           
+
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('show');
+        }
+
+ 
+        function shakeNavbar() {
+            const navbar = document.querySelector('.navbar');
+            navbar.classList.add('shake');
+
+         
+            setTimeout(() => {
+                navbar.classList.remove('shake');
+            }, 500); 
+        }
+
+        function updateInboxCount(count) {
+            document.getElementById('inbox-count').textContent = count;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+ 
+
+       

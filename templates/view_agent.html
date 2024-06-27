@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>{% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: hwb(259 58% 26%);
+        }
+        .navbar {
+            background-color: #343a40;
+            position: relative; 
+            width: 100%;
+            padding: 20px 40px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .navbar-nav .nav-link {
+            color: #343a40;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffc107;
+        }
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            background-color: #343a40;
+            padding-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #fff;
+            display: block;
+        }
+        .sidebar a:hover {
+            color: #ffc107;
+        }
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+        
+      
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+     
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .content {
+            max-width: 600px; 
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: center; 
+        }
+        .agent-card h2 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .agent-details p {
+            margin-bottom: 5px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #0056b3;
+        }
+
+        .back-link:active {
+            background-color: #004085;
+        }
+        .agent-image {
+            max-width: 100%;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+        </style>
+        </head>
+        <body>
+            <header>
+                <nav class="navbar navbar-expand-lg navbar-dark">
+                    <a class="navbar-brand" href="{% url 'home' %}">PETS SHORE</a>
+                    <button class="navbar-toggler" type="button" onclick="toggleSidebar()">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'admin_dashboard' %}">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'home' %}">Logout</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </header>
+        
+            <div class="sidebar" id="sidebar">
+                <a class="active" href="{% url 'home' %}">SECURE POLICY</a>
+                <hr>
+                <a href="{% url 'admin_dashboard' %}">HOME</a>
+               
+                  
+                </a>
+                <hr>
+                <a href="{% url 'add_agent' %}">Add AGENT</a>
+                <a href="{% url 'view_agent' %}">VIEW AGENT</a>
+                <a href="{% url 'campaign' %}">CAMPAIGN</a>
+                <a href="#">POLICY</a>
+                <a href="#">REPORT</a>
+              
+            </div>
+       
+            <br>
+            <br>
+            <br>
+            <h2 style="text-align: center; color:black ; background-color: white;">AGENT DETAILS</h2>
+            <!-- Page Content -->
+            <div class="container-fluid">
+                <div class="row">
+                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="content">
+                                        <div class="agent-card">
+                                            
+                                            <img src="{% static  'images/women2.jpg' %}" width="100%" height="140px">
+                                            
+                                            <div class="agent-details">
+                                                <p><strong>Name:</strong> Nivedhya</p>
+                                                <p><strong>Qualification:</strong> MCA</p>
+                                                <p><strong>Address:</strong> 13 nj nagar, thalassery, kl</p>
+                                                <p><strong>Phone:</strong> 9988776688</p>
+                                                <p><strong>Email:</strong> nivedhya@gmail.com</p>
+                                            </div>
+                                            <a href="{% url 'edit_agent' %}" class="back-link">Edit Agent</a>
+                                            <a href="{% url 'delete_agent' %}" class="back-link">Delete Agent</a>
+                                            <a href="{% url 'view_agent_locations' %}" class="back-link">Location history</a>
+                                            <a href="{% url 'view_customer' %}" class="back-link">Customer Details</a>
+                                            <a href="{% url 'admin_dashboard' %}" class="back-link">Back to Dashboard</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="content">
+                                        <div class="agent-card">
+                                            <img src="{% static  'images/women2.jpg' %}" width="100%" height="140px">
+                                          
+                                            <div class="agent-details">
+                                                <p><strong>Name:</strong> Gouri DS</p>
+                                                <p><strong>Qualification:</strong> MBA</p>
+                                                <p><strong>Address:</strong> 13 pk nagar, thalassery, kl</p>
+                                                <p><strong>Phone:</strong> 9988776688</p>
+                                                <p><strong>Email:</strong> gouri@gmail.com</p>
+                                            </div>
+                                            <a href="{% url 'edit_agent' %}" class="back-link">Edit Agent</a>
+                                            <a href="{% url 'delete_agent' %}" class="back-link">Delete Agent</a>
+                                            <a href="{% url 'view_agent_locations' %}" class="back-link">Location history</a>
+                                            <a href="{% url 'view_customer' %}" class="back-link">Customer Details</a>
+                                            <a href="{% url 'admin_dashboard' %}" class="back-link">Back to Dashboard</a>
+                                           </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="content">
+                                        <div class="agent-card">
+                                            <img src="{% static  'images/women2.jpg' %}" width="100%" height="140px">
+                                           
+                                            <div class="agent-details">
+                                                <p><strong>Name:</strong> Devahara</p>
+                                                <p><strong>Qualification:</strong> MCOM</p>
+                                                <p><strong>Address:</strong> 13 pg nagar, thalassery, kl</p>
+                                                <p><strong>Phone:</strong> 9988776688</p>
+                                                <p><strong>Email:</strong> devu@gmail.com</p>
+                                            </div>
+                                            <a href="{% url 'edit_agent' %}" class="back-link">Edit Agent</a>
+                                            <a href="{% url 'delete_agent' %}" class="back-link">Delete Agent</a>
+                                            <a href="{% url 'view_agent_locations' %}" class="back-link">Location history</a>
+                                            <a href="{% url 'view_customer' %}" class="back-link">Customer Details</a>
+                                            <a href="{% url 'admin_dashboard' %}" class="back-link">Back to Dashboard</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+
+
+
+            <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <script>
+                function toggleSidebar() {
+                    const sidebar = document.getElementById('sidebar');
+                    sidebar.classList.toggle('show');
+                }
+        
+         
+                function shakeNavbar() {
+                    const navbar = document.querySelector('.navbar');
+                    navbar.classList.add('shake');
+        
+                 
+                    setTimeout(() => {
+                        navbar.classList.remove('shake');
+                    }, 500); 
+                }
+        
+                function updateInboxCount(count) {
+                    document.getElementById('inbox-count').textContent = count;
+                }
+            </script>
+        </body>
+        </html>
+        
+        
+        
+        
+        
+        
+        
+        
+         
